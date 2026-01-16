@@ -1,20 +1,20 @@
-# 🛒 ElectroShop - E-Commerce Platform
+#  ElectroShop - E-Commerce Platform
 
 Une plateforme e-commerce complète développée avec ASP.NET Core MVC et Bootstrap.
 
-## 📸 Captures d'écran
+##  Captures d'écran
 
 ![Page d'accueil](screenshots/home.png)
 ![Produits](screenshots/products.png)
 
-## 🚀 Technologies utilisées
+##  Technologies utilisées
 
 - **Backend:** ASP.NET Core MVC 6.0
 - **Frontend:** Bootstrap 5, CSS3, JavaScript
 - **Base de données:** SQL Server + Entity Framework Core
 - **Authentification:** ASP.NET Identity
 
-## ⚡ Fonctionnalités
+##  Fonctionnalités
 
 - ✅ Catalogue de produits avec filtrage par catégories
 - ✅ Panier d'achat dynamique
@@ -23,11 +23,11 @@ Une plateforme e-commerce complète développée avec ASP.NET Core MVC et Bootst
 - ✅ Tableau de bord administrateur
 - ✅ Design responsive
 
-## 🛠️ Installation
+##  Installation
 
 1. Cloner le repository
 ```bash
-git clone https://github.com/Amalabedal22/ElectroShop.git
+git remote add origin https://github.com/amalabdelghaffar/ElectroShop.git
 ```
 
 2. Ouvrir avec Visual Studio 2022
@@ -41,12 +41,12 @@ Update-Database
 
 5. Lancer l'application
 
-## 👩‍💻 Auteur
+##  Auteur
 
 **Amal Benabdelghaffar**
-- GitHub: [@Amalabedal22](https://github.com/Amalabedal22)
-- LinkedIn: [Amal Benabdelghaffar](votre-lien-linkedin)
+- GitHub: [@Amalabedal22](https://github.com/amalabdelghaffar)
+- LinkedIn: [Amal Benabdelghaffar](https://www.linkedin.com/in/amalbenabdelghaffar/)
 
-## 📝 License
+##  License
 
 Ce projet est sous licence MIT.
