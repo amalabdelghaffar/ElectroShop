@@ -9,7 +9,7 @@ Une plateforme e-commerce complète développée avec ASP.NET Core MVC et Bootst
 
 ##  Technologies utilisées
 
-- **Backend:** ASP.NET Core MVC 6.0
+- **Backend:** ASP.NET Core MVC 8.0
 - **Frontend:** Bootstrap 5, CSS3, JavaScript
 - **Base de données:** SQL Server + Entity Framework Core
 - **Authentification:** ASP.NET Identity
