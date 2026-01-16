@@ -1,0 +1,353 @@
+﻿@model Atelier2.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Finaliser la commande";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Colonne de gauche : Formulaire -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h4 mb-0 fw-bold">
+                        <i class="fas fa-shipping-fast me-2"></i>Informations de livraison
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Checkout" method="post" id="checkoutForm">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Adresse de livraison -->
+                        <div class="mb-4">
+                            <label for="Address" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-2 text-primary"></i>Adresse de livraison
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-home"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-lg"
+                                       id="Address" name="Address"
+                                       value="@Model.Address"
+                                       placeholder="Entrez votre adresse complète"
+                                       required>
+                            </div>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                L'adresse où vous souhaitez recevoir votre commande
+                            </div>
+                        </div>
+
+                        <!-- Méthode de paiement -->
+                        <div class="mb-4">
+                            <label for="PaymentMethod" class="form-label fw-bold">
+                                <i class="fas fa-credit-card me-2 text-primary"></i>Méthode de paiement
+                            </label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="payment-option @(Model.PaymentMethod == "CreditCard" ? "selected" : "")"
+                                         data-value="CreditCard">
+                                        <div class="card h-100 border-2">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-credit-card fa-2x text-primary mb-3"></i>
+                                                <h6 class="fw-bold">Carte de crédit</h6>
+                                                <small class="text-muted">Visa, Mastercard</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="payment-option @(Model.PaymentMethod == "Paypal" ? "selected" : "")"
+                                         data-value="Paypal">
+                                        <div class="card h-100 border-2">
+                                            <div class="card-body text-center">
+                                                <i class="fab fa-paypal fa-2x text-primary mb-3"></i>
+                                                <h6 class="fw-bold">PayPal</h6>
+                                                <small class="text-muted">Paiement sécurisé</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <select class="form-select d-none" id="PaymentMethod" name="PaymentMethod">
+                                <option value="CreditCard" selected="@(Model.PaymentMethod == "CreditCard")">Carte de crédit</option>
+                                <option value="Paypal" selected="@(Model.PaymentMethod == "Paypal")">PayPal</option>
+                            </select>
+                        </div>
+
+                        <!-- Montant total -->
+                        <div class="mb-4 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="fw-bold mb-1">Montant total</h5>
+                                    <small class="text-muted">TVA incluse</small>
+                                </div>
+                                <h3 class="text-primary fw-bold mb-0">@Model.TotalAmount</h3>
+                            </div>
+                            <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
+                        </div>
+
+                        <!-- Champs cachés pour les articles du panier -->
+                        @for (int i = 0; i < Model.CartItems.Count; i++)
+                        {
+                            <input type="hidden" name="CartItems[@i].ProductName" value="@Model.CartItems[i].ProductName" />
+                            <input type="hidden" name="CartItems[@i].Quantity" value="@Model.CartItems[i].Quantity" />
+                            <input type="hidden" name="CartItems[@i].Price" value="@Model.CartItems[i].Price" />
+                        }
+
+                        <!-- Bouton de soumission -->
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg py-3">
+                                <i class="fas fa-lock me-2"></i>Payer et confirmer la commande
+                            </button>
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Retour au panier
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite : Récapitulatif du panier -->
+        <div class="col-lg-5">
+            <div class="card-header bg-primary py-3">
+                <h2 class="h4 mb-0 fw-bold text-white">
+                    <i class="fas fa-receipt me-2"></i>Récapitulatif de commande
+                </h2>
+            </div>
+
+                <div class="card-body p-0">
+                    <!-- Liste des articles -->
+                    <div class="p-4">
+                        <h5 class="fw-bold mb-3">Articles dans votre panier</h5>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                         style="width: 50px; height: 50px;">
+                                        <i class="fas fa-box text-muted"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1">@item.ProductName</h6>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">Quantité: @item.Quantity</small>
+                                        <small class="text-muted">@item.Price × @item.Quantity</small>
+                                    </div>
+                                </div>
+                                <div class="text-end ms-3">
+                                    <span class="fw-bold">@(item.Price* item.Quantity)</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Détails du total -->
+                    <div class="bg-light p-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Sous-total</span>
+                            <span>@Model.TotalAmount</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Frais de livraison</span>
+                            <span class="text-success">Gratuit</span>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">Total à payer</h5>
+                            <h4 class="text-primary fw-bold mb-0">@Model.TotalAmount</h4>
+                        </div>
+                    </div>
+
+                    <!-- Informations de sécurité -->
+                    <div class="p-4 border-top">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-shield-alt text-success me-2"></i>
+                                    <span>Paiement sécurisé</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-truck text-info me-2"></i>
+                                    <span>Livraison 48h</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <span>Données cryptées</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-undo text-secondary me-2"></i>
+                                    <span>Retour gratuit</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tableau détaillé (version desktop) -->
+<div class="container mt-5 d-none d-lg-block">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h3 class="h5 mb-0 fw-bold">
+                <i class="fas fa-list-alt me-2"></i>Détail de votre panier
+            </h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th class="text-end pe-4">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                                 style="width: 40px; height: 40px;">
+                                                <i class="fas fa-box text-muted"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="fw-bold">@item.ProductName</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary rounded-pill px-3 py-2">@item.Quantity</span>
+                                </td>
+                                <td>@item.Price</td>
+                                <td class="text-end pe-4 fw-bold">@(item.Price* item.Quantity)</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <td colspan="3" class="text-end fw-bold ps-4">Total commande</td>
+                            <td class="text-end pe-4 fw-bold fs-5 text-primary">@Model.TotalAmount</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles additionnels -->
+<style>
+    .payment-option .card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-color: #dee2e6;
+    }
+
+        .payment-option .card:hover {
+            transform: translateY(-2px);
+            border-color: #0d6efd;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .payment-option.selected .card {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    .sticky-top {
+        z-index: 1020;
+    }
+
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    .alert {
+        border: none;
+        border-radius: 0.5rem;
+    }
+
+    .border-bottom:last-child {
+        border-bottom: none !important;
+    }
+
+    .btn-lg {
+        font-weight: 600;
+    }
+</style>
+
+<!-- Scripts -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Sélection de la méthode de paiement
+            $('.payment-option').click(function() {
+                $('.payment-option').removeClass('selected');
+                $(this).addClass('selected');
+
+                var selectedValue = $(this).data('value');
+                $('#PaymentMethod').val(selectedValue);
+            });
+
+            // Validation du formulaire
+            $('#checkoutForm').submit(function(e) {
+                var address = $('#Address').val().trim();
+                if (!address) {
+                    e.preventDefault();
+                    $('#Address').addClass('is-invalid');
+                    $('#Address').focus();
+                    return false;
+                }
+
+                // Afficher un indicateur de chargement
+                $('button[type="submit"]').html('<i class="fas fa-spinner fa-spin me-2"></i>Traitement en cours...');
+                $('button[type="submit"]').prop('disabled', true);
+            });
+
+            // Validation en temps réel de l'adresse
+            $('#Address').on('input', function() {
+                if ($(this).val().trim()) {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+}

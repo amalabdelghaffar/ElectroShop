@@ -1,0 +1,42 @@
+﻿@model Atelier2.Models.Category
+
+@{
+    ViewData["Title"] = "Modifier une catégorie";
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0 rounded-4 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-transparent border-0 text-center">
+            <h2 class="fw-bold text-primary mb-2">Modifier la catégorie</h2>
+            <p class="text-muted mb-0">Mettez à jour les informations de votre catégorie</p>
+        </div>
+
+        <div class="card-body px-4 py-4">
+            <form asp-action="Edit" method="post" class="needs-validation">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="CategoryId" />
+
+                <!-- Champ Nom -->
+                <div class="mb-4">
+                    <label asp-for="CategoryName" class="form-label fw-semibold">Nom de la catégorie</label>
+                    <input asp-for="CategoryName" class="form-control form-control-lg" placeholder="Ex: Hygiène, Alimentaire..." />
+                    <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                </div>
+
+                <!-- Boutons -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-outline-success btn-md custom-btn px-3 me-2">
+                        <i class="bi bi-check-circle"></i> Mettre à jour
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-md custom-btn px-3">
+                        <i class="bi bi-arrow-left"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

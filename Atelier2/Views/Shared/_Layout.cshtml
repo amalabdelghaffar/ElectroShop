@@ -1,0 +1,1427 @@
+﻿@*   
+    Fichier : _Layout.cshtml  
+    Description : Layout principal avec header/footer harmonisés - Thème Blanc & Bleu Professionnel
+*@
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@using Atelier2.Models.Help
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script src="~/js/CustomScript.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ElectroShop</title>
+
+    <!-- Fonts professionnelles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Atelier2.styles.css" asp-append-version="true" />
+
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+                   VARIABLES - Palette Professionnelle Blanc & Bleu
+                   ═══════════════════════════════════════════════════════════ */
+        :root {
+            /* Couleurs principales */
+            --es-primary: #1e40af;
+            --es-primary-dark: #1e3a8a;
+            --es-primary-light: #3b82f6;
+            --es-accent: #0ea5e9;
+            /* Neutres */
+            --es-white: #ffffff;
+            --es-gray-50: #f8fafc;
+            --es-gray-100: #f1f5f9;
+            --es-gray-200: #e2e8f0;
+            --es-gray-300: #cbd5e1;
+            --es-gray-400: #94a3b8;
+            --es-gray-500: #64748b;
+            --es-gray-600: #475569;
+            --es-gray-700: #334155;
+            --es-gray-800: #1e293b;
+            --es-gray-900: #0f172a;
+            /* États */
+            --es-success: #10b981;
+            --es-warning: #f59e0b;
+            --es-danger: #ef4444;
+            /* Effets */
+            --es-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --es-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --es-shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --es-shadow-blue: 0 4px 14px rgba(30, 64, 175, 0.25);
+            --es-radius: 10px;
+            --es-radius-sm: 6px;
+            --es-radius-full: 9999px;
+            --es-transition: all 0.2s ease;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--es-gray-50);
+            color: var(--es-gray-800);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+                   HEADER STRUCTURE
+                   ═══════════════════════════════════════════════════════════ */
+        .es-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--es-white);
+            box-shadow: var(--es-shadow);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+                   TOPBAR - Barre bleue supérieure
+                   ═══════════════════════════════════════════════════════════ */
+        .es-topbar {
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-dark) 100%);
+            padding: 10px 0;
+        }
+
+        .es-topbar-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.813rem;
+            font-weight: 500;
+            transition: var(--es-transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .es-topbar-link:hover {
+                color: var(--es-white);
+            }
+
+        .es-topbar-divider {
+            color: rgba(255, 255, 255, 0.3);
+            margin: 0 15px;
+        }
+
+        .es-topbar-phone {
+            color: var(--es-white);
+            font-size: 0.813rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .es-topbar-phone strong {
+                font-weight: 700;
+            }
+
+        /* ═══════════════════════════════════════════════════════════
+                   HEADER MAIN - Section blanche
+                   ═══════════════════════════════════════════════════════════ */
+        .es-header-main {
+            padding: 16px 0;
+            background: var(--es-white);
+            border-bottom: 1px solid var(--es-gray-200);
+        }
+
+        /* Logo */
+        .es-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: var(--es-transition);
+        }
+
+            .es-logo:hover {
+                opacity: 0.9;
+            }
+
+        .es-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-light) 100%);
+            border-radius: var(--es-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--es-white);
+            box-shadow: var(--es-shadow-blue);
+        }
+
+        .es-logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--es-gray-800);
+            letter-spacing: -0.02em;
+        }
+
+            .es-logo-text span {
+                color: var(--es-primary);
+            }
+
+        /* Barre de recherche */
+        .es-search {
+            flex: 1;
+            max-width: 550px;
+            margin: 0 40px;
+        }
+
+        .es-search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .es-search-input {
+            width: 100%;
+            padding: 12px 130px 12px 45px;
+            background: var(--es-gray-100);
+            border: 2px solid var(--es-gray-200);
+            border-radius: var(--es-radius-full);
+            color: var(--es-gray-800);
+            font-size: 0.938rem;
+            font-family: var(--font-main);
+            transition: var(--es-transition);
+        }
+
+            .es-search-input::placeholder {
+                color: var(--es-gray-400);
+            }
+
+            .es-search-input:focus {
+                outline: none;
+                background: var(--es-white);
+                border-color: var(--es-primary-light);
+                box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            }
+
+        .es-search-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--es-gray-400);
+            font-size: 1.1rem;
+        }
+
+        .es-search-btn {
+            position: absolute;
+            right: 5px;
+            padding: 8px 22px;
+            background: var(--es-primary);
+            border: none;
+            border-radius: var(--es-radius-full);
+            color: var(--es-white);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--es-transition);
+        }
+
+            .es-search-btn:hover {
+                background: var(--es-primary-dark);
+                box-shadow: var(--es-shadow-blue);
+            }
+
+        /* Actions Header */
+        .es-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .es-action-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--es-gray-100);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            color: var(--es-gray-600);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--es-transition);
+        }
+
+            .es-action-btn:hover {
+                background: var(--es-primary);
+                border-color: var(--es-primary);
+                color: var(--es-white);
+                box-shadow: var(--es-shadow-blue);
+            }
+
+        /* Panier */
+        .es-cart-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--es-gray-100);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            color: var(--es-gray-700);
+            text-decoration: none;
+            transition: var(--es-transition);
+        }
+
+            .es-cart-btn:hover {
+                background: var(--es-white);
+                border-color: var(--es-primary);
+                color: var(--es-primary);
+                box-shadow: var(--es-shadow);
+            }
+
+        .es-cart-icon {
+            position: relative;
+            font-size: 1.25rem;
+        }
+
+        .es-cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            background: var(--es-primary);
+            border-radius: var(--es-radius-full);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--es-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .es-cart-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+
+        .es-cart-label {
+            font-size: 0.75rem;
+            color: var(--es-gray-500);
+        }
+
+        .es-cart-count {
+            font-weight: 700;
+            color: var(--es-primary);
+            font-size: 0.875rem;
+        }
+
+        /* Auth Section */
+        .es-auth-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 16px;
+            padding-left: 16px;
+            border-left: 1px solid var(--es-gray-200);
+        }
+
+        .es-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .es-user-avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--es-white);
+            font-size: 1rem;
+        }
+
+        .es-user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--es-gray-700);
+        }
+
+        .es-btn {
+            padding: 10px 20px;
+            border-radius: var(--es-radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--es-transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .es-btn-outline {
+            background: transparent;
+            border: 2px solid var(--es-gray-300);
+            color: var(--es-gray-600);
+        }
+
+            .es-btn-outline:hover {
+                border-color: var(--es-primary);
+                color: var(--es-primary);
+                background: rgba(30, 64, 175, 0.05);
+            }
+
+        .es-btn-primary {
+            background: var(--es-primary);
+            color: var(--es-white);
+            border: 2px solid var(--es-primary);
+        }
+
+            .es-btn-primary:hover {
+                background: var(--es-primary-dark);
+                border-color: var(--es-primary-dark);
+                box-shadow: var(--es-shadow-blue);
+                color: var(--es-white);
+            }
+
+        /* ═══════════════════════════════════════════════════════════
+                   NAVIGATION PRINCIPALE
+                   ═══════════════════════════════════════════════════════════ */
+        .es-navbar {
+            background: var(--es-white);
+            border-bottom: 1px solid var(--es-gray-200);
+            padding: 0;
+        }
+
+        .es-nav-list {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .es-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 22px;
+            color: var(--es-gray-600);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            transition: var(--es-transition);
+        }
+
+            .es-nav-link::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: var(--es-primary);
+                transform: scaleX(0);
+                transition: var(--es-transition);
+            }
+
+            .es-nav-link:hover {
+                color: var(--es-primary);
+                background: var(--es-gray-50);
+            }
+
+                .es-nav-link:hover::after,
+                .es-nav-link.active::after {
+                    transform: scaleX(1);
+                }
+
+            .es-nav-link.active {
+                color: var(--es-primary);
+            }
+
+            .es-nav-link i {
+                font-size: 1rem;
+            }
+
+        /* Dropdown */
+        .es-dropdown {
+            position: relative;
+        }
+
+        .es-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 220px;
+            background: var(--es-white);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--es-transition);
+            box-shadow: var(--es-shadow-lg);
+            z-index: 1000;
+        }
+
+        .es-dropdown:hover .es-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .es-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--es-gray-600);
+            text-decoration: none;
+            border-radius: var(--es-radius-sm);
+            font-weight: 500;
+            transition: var(--es-transition);
+        }
+
+            .es-dropdown-item:hover {
+                background: var(--es-gray-100);
+                color: var(--es-primary);
+            }
+
+            .es-dropdown-item i {
+                width: 18px;
+                color: var(--es-primary);
+            }
+
+        .es-dropdown-divider {
+            height: 1px;
+            background: var(--es-gray-200);
+            margin: 8px 0;
+        }
+
+        /* Promo Tag */
+        .es-promo-tag {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--es-success) 0%, #059669 100%);
+            border-radius: var(--es-radius-full);
+            color: var(--es-white);
+            font-size: 0.813rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+            .es-promo-tag i {
+                font-size: 1rem;
+            }
+
+        /* ═══════════════════════════════════════════════════════════
+                   FOOTER - MÊME THÈME QUE LE HEADER (Blanc & Bleu)
+                   ═══════════════════════════════════════════════════════════ */
+        .es-footer {
+            background: var(--es-white);
+            margin-top: 60px;
+            border-top: 1px solid var(--es-gray-200);
+        }
+
+        /* Section supérieure du footer avec fond bleu */
+        .es-footer-top-bar {
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-dark) 100%);
+            padding: 30px 0;
+        }
+
+        .es-footer-features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .es-footer-feature {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--es-white);
+        }
+
+        .es-footer-feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--es-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .es-footer-feature-text h6 {
+            font-size: 0.938rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .es-footer-feature-text p {
+            font-size: 0.813rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        /* Section principale du footer - Fond blanc */
+        .es-footer-main {
+            padding: 50px 0 40px;
+            background: var(--es-white);
+        }
+
+        .es-footer-brand {
+            margin-bottom: 24px;
+        }
+
+        .es-footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .es-footer-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-light) 100%);
+            border-radius: var(--es-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--es-white);
+            box-shadow: var(--es-shadow-blue);
+        }
+
+        .es-footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--es-gray-800);
+        }
+
+            .es-footer-logo-text span {
+                color: var(--es-primary);
+            }
+
+        .es-footer-desc {
+            color: var(--es-gray-500);
+            font-size: 0.938rem;
+            line-height: 1.7;
+            max-width: 320px;
+        }
+
+        .es-footer-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--es-gray-800);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+            .es-footer-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 40px;
+                height: 3px;
+                background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-light) 100%);
+                border-radius: 3px;
+            }
+
+        .es-footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .es-footer-links li {
+                margin-bottom: 12px;
+            }
+
+            .es-footer-links a {
+                color: var(--es-gray-500);
+                text-decoration: none;
+                font-size: 0.938rem;
+                transition: var(--es-transition);
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+                .es-footer-links a:hover {
+                    color: var(--es-primary);
+                    padding-left: 6px;
+                }
+
+                .es-footer-links a i {
+                    font-size: 0.7rem;
+                    color: var(--es-primary-light);
+                }
+
+        /* Contact Footer */
+        .es-footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .es-footer-contact-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--es-gray-100);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--es-primary);
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: var(--es-transition);
+        }
+
+        .es-footer-contact-item:hover .es-footer-contact-icon {
+            background: var(--es-primary);
+            border-color: var(--es-primary);
+            color: var(--es-white);
+        }
+
+        .es-footer-contact-text {
+            color: var(--es-gray-500);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+            .es-footer-contact-text strong {
+                display: block;
+                color: var(--es-gray-700);
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+
+        /* Newsletter */
+        .es-newsletter-box {
+            background: var(--es-gray-50);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            padding: 24px;
+        }
+
+        .es-newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .es-newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--es-white);
+            border: 2px solid var(--es-gray-200);
+            border-radius: var(--es-radius-sm);
+            color: var(--es-gray-800);
+            font-size: 0.875rem;
+            transition: var(--es-transition);
+        }
+
+            .es-newsletter-input::placeholder {
+                color: var(--es-gray-400);
+            }
+
+            .es-newsletter-input:focus {
+                outline: none;
+                border-color: var(--es-primary-light);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+        .es-newsletter-btn {
+            padding: 12px 24px;
+            background: var(--es-primary);
+            border: none;
+            border-radius: var(--es-radius-sm);
+            color: var(--es-white);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--es-transition);
+        }
+
+            .es-newsletter-btn:hover {
+                background: var(--es-primary-dark);
+                box-shadow: var(--es-shadow-blue);
+            }
+
+        /* Social Links */
+        .es-social-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .es-social-link {
+            width: 42px;
+            height: 42px;
+            background: var(--es-gray-100);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--es-gray-500);
+            font-size: 1.1rem;
+            transition: var(--es-transition);
+            text-decoration: none;
+        }
+
+            .es-social-link:hover {
+                background: var(--es-primary);
+                border-color: var(--es-primary);
+                color: var(--es-white);
+                transform: translateY(-3px);
+                box-shadow: var(--es-shadow-blue);
+            }
+
+        /* Footer Bottom - Barre bleue */
+        .es-footer-bottom {
+            background: linear-gradient(135deg, var(--es-primary) 0%, var(--es-primary-dark) 100%);
+            padding: 20px 0;
+        }
+
+        .es-footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .es-footer-copyright {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+            .es-footer-copyright strong {
+                color: var(--es-white);
+                font-weight: 700;
+            }
+
+        .es-footer-payments {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .es-footer-payments span {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.813rem;
+            }
+
+        .es-payment-icon {
+            width: 44px;
+            height: 30px;
+            background: var(--es-white);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--es-gray-700);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+                   RESPONSIVE
+                   ═══════════════════════════════════════════════════════════ */
+        .es-mobile-toggle {
+            display: none;
+            padding: 10px;
+            background: var(--es-gray-100);
+            border: 1px solid var(--es-gray-200);
+            border-radius: var(--es-radius-sm);
+            color: var(--es-gray-700);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        @@media (max-width: 1199px) {
+            .es-search {
+                margin: 0 20px;
+            }
+
+            .es-footer-features {
+                justify-content: center;
+            }
+
+            .es-footer-feature {
+                flex: 0 0 calc(50% - 20px);
+                justify-content: center;
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .es-header-main .container-fluid {
+                flex-wrap: wrap;
+            }
+
+            .es-search {
+                order: 3;
+                width: 100%;
+                max-width: none;
+                margin: 16px 0 0 0;
+            }
+
+            .es-cart-info {
+                display: none;
+            }
+
+            .es-mobile-toggle {
+                display: flex;
+            }
+
+            .es-nav-list {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 10px 0;
+                background: var(--es-white);
+            }
+
+                .es-nav-list.active {
+                    display: flex;
+                }
+
+            .es-nav-link {
+                width: 100%;
+                padding: 14px 20px;
+            }
+
+            .es-promo-tag {
+                display: none;
+            }
+
+            .es-footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .es-footer-feature {
+                flex: 0 0 100%;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .es-footer-main .row > div {
+                margin-bottom: 30px;
+            }
+
+            .es-newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .es-topbar-phone {
+                display: none;
+            }
+
+            .es-logo-text {
+                font-size: 1.25rem;
+            }
+
+            .es-auth-group {
+                display: none;
+            }
+
+            .es-action-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .es-footer-top-bar {
+                padding: 20px 0;
+            }
+
+            .es-footer-feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HEADER PROFESSIONNEL - BLANC & BLEU
+         ═══════════════════════════════════════════════════════════ -->
+    <header class="es-header">
+
+        <!-- TOPBAR BLEU -->
+        <div class="es-topbar">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="#" class="es-topbar-link">
+                        <i class="bi bi-question-circle"></i> Aide
+                    </a>
+                    <span class="es-topbar-divider">|</span>
+                    <a href="#" class="es-topbar-link">
+                        <i class="bi bi-headset"></i> Support
+                    </a>
+                    <span class="es-topbar-divider">|</span>
+                    <a asp-controller="Home" asp-action="Contact" class="es-topbar-link">
+                        <i class="bi bi-envelope"></i> Contact
+                    </a>
+                </div>
+                <div class="es-topbar-phone">
+                    <i class="bi bi-telephone-fill"></i>
+                    Appelez-nous : <strong>(+216) 21 491 299</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADER MAIN BLANC -->
+        <div class="es-header-main">
+            <div class="container-fluid d-flex align-items-center">
+
+                <!-- Logo -->
+                <a class="es-logo" asp-controller="Home" asp-action="Index">
+                    <div class="es-logo-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <span class="es-logo-text">Electro<span>Shop</span></span>
+                </a>
+
+                <!-- Barre de recherche -->
+                <form class="es-search" asp-controller="Product" asp-action="Search" method="get">
+                    <div class="es-search-wrapper">
+                        <i class="bi bi-search es-search-icon"></i>
+                        <input class="es-search-input"
+                               type="search"
+                               name="val"
+                               placeholder="Rechercher un produit, une marque..."
+                               autocomplete="off" />
+                        <button class="es-search-btn" type="submit">
+                            Rechercher
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Actions -->
+                <div class="es-header-actions">
+
+                    <!-- Bouton Catégories -->
+                    <button class="es-action-btn" id="toggleMenu" title="Catégories">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                    </button>
+
+                    <!-- Favoris -->
+                    <button class="es-action-btn" title="Mes favoris">
+                        <i class="bi bi-heart"></i>
+                    </button>
+
+                    <!-- Panier -->
+                    <a asp-controller="Panier" asp-action="Index" class="es-cart-btn">
+                        <div class="es-cart-icon">
+                            <i class="bi bi-bag-fill"></i>
+                            <span class="es-cart-badge" id="cartCountBadge">
+                                @ListeCart.Instance.Items.Sum(i => i.quantite)
+                            </span>
+                        </div>
+                        <div class="es-cart-info">
+                            <span class="es-cart-label">Mon Panier</span>
+                            <span class="es-cart-count">
+                                @ListeCart.Instance.Items.Sum(i => i.quantite) article(s)
+                            </span>
+                        </div>
+                    </a>
+
+                    <!-- Auth Section -->
+                    <div class="es-auth-group">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="es-user-info">
+                                <div class="es-user-avatar">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <span class="es-user-name d-none d-lg-inline">@User.Identity.Name</span>
+                            </div>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="es-btn es-btn-outline">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span class="d-none d-xl-inline">Déconnexion</span>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="es-btn es-btn-outline" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-person"></i>
+                                Connexion
+                            </a>
+                            <a class="es-btn es-btn-primary" asp-controller="Account" asp-action="Register">
+                                <i class="bi bi-person-plus-fill"></i>
+                                Inscription
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION PRINCIPALE -->
+        <nav class="es-navbar">
+            <div class="container-fluid d-flex align-items-center">
+
+                <button class="es-mobile-toggle" id="mobileMenuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <ul class="es-nav-list" id="mainNavList">
+
+                    <li>
+                        <a class="es-nav-link active" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door"></i>
+                            Accueil
+                        </a>
+                    </li>
+
+                    <!-- Menu Administration (Admin only) -->
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <li class="es-dropdown">
+                            <a class="es-nav-link" href="#">
+                                <i class="bi bi-shield-lock"></i>
+                                Administration
+                                <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+                            </a>
+                            <div class="es-dropdown-menu">
+                                <a class="es-dropdown-item" asp-controller="Admin" asp-action="CreateRole">
+                                    <i class="bi bi-plus-circle"></i>
+                                    Créer un rôle
+                                </a>
+                                <div class="es-dropdown-divider"></div>
+                                <a class="es-dropdown-item" asp-controller="Admin" asp-action="ListRoles">
+                                    <i class="bi bi-list-ul"></i>
+                                    Liste des rôles
+                                </a>
+                            </div>
+                        </li>
+                    }
+
+                    <!-- Menu Articles -->
+                    <li class="es-dropdown">
+                        <a class="es-nav-link" href="#">
+                            <i class="bi bi-box-seam"></i>
+                            Articles
+                            <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+                        </a>
+                        <div class="es-dropdown-menu">
+                            <a class="es-dropdown-item" asp-controller="Product" asp-action="Index">
+                                <i class="bi bi-collection"></i>
+                                Tous les articles
+                            </a>
+                            <a class="es-dropdown-item" asp-controller="Product" asp-action="Create">
+                                <i class="bi bi-plus-circle"></i>
+                                Nouvel article
+                            </a>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a class="es-nav-link" asp-controller="Category" asp-action="Index">
+                            <i class="bi bi-tags"></i>
+                            Catégories
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="es-nav-link" asp-controller="Home" asp-action="Contact">
+                            <i class="bi bi-chat-dots"></i>
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- Promo Tag -->
+                <div class="es-promo-tag">
+                    <i class="bi bi-truck"></i>
+                    Livraison gratuite dès 100 DT
+                </div>
+
+            </div>
+        </nav>
+
+    </header>
+    <!-- ═══════════ FIN HEADER ═══════════ -->
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md-2" id="sidebar" style="display: none;">
+                <p></p>
+                <ul class="list-group">
+                    @await Html.PartialAsync("_CategoriesMenu", ViewData["Categories"])
+                </ul>
+            </div>
+
+            <div class="col">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FOOTER - MÊME THÈME BLANC & BLEU
+         ═══════════════════════════════════════════════════════════ -->
+    <footer class="es-footer">
+
+        <!-- Barre de fonctionnalités - Fond Bleu -->
+        <div class="es-footer-top-bar">
+            <div class="container">
+                <div class="es-footer-features">
+                    <div class="es-footer-feature">
+                        <div class="es-footer-feature-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <div class="es-footer-feature-text">
+                            <h6>Livraison Gratuite</h6>
+                            <p>Sur toutes vos commandes</p>
+                        </div>
+                    </div>
+                    <div class="es-footer-feature">
+                        <div class="es-footer-feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div class="es-footer-feature-text">
+                            <h6>Paiement Sécurisé</h6>
+                            <p>100% sécurisé</p>
+                        </div>
+                    </div>
+                    <div class="es-footer-feature">
+                        <div class="es-footer-feature-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <div class="es-footer-feature-text">
+                            <h6>Support 24/7</h6>
+                            <p>Service client rapide</p>
+                        </div>
+                    </div>
+                    <div class="es-footer-feature">
+                        <div class="es-footer-feature-icon">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </div>
+                        <div class="es-footer-feature-text">
+                            <h6>Retours Gratuits</h6>
+                            <p>30 jours de garantie</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section principale - Fond Blanc -->
+        <div class="es-footer-main">
+            <div class="container">
+                <div class="row">
+
+                    <!-- Brand & Description -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="es-footer-brand">
+                            <a class="es-footer-logo" asp-controller="Home" asp-action="Index">
+                                <div class="es-footer-logo-icon">
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                </div>
+                                <span class="es-footer-logo-text">Electro<span>Shop</span></span>
+                            </a>
+                            <p class="es-footer-desc">
+                                Votre boutique en ligne de confiance pour tous vos besoins en électronique et high-tech. Qualité et service garantis.
+                            </p>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="es-social-links">
+                            <a href="https://www.facebook.com/amal.abdelgaffar.5" class="es-social-link" title="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="https://www.instagram.com/amal_benabdelghaffar/" class="es-social-link" title="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/amalbenabdelghaffar/" class="es-social-link" title="LinkedIn">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                            <a href="#" class="es-social-link" title="Twitter">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Liens Navigation -->
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h6 class="es-footer-title">Navigation</h6>
+                        <ul class="es-footer-links">
+                            <li>
+                                <a asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-chevron-right"></i> Accueil
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Product" asp-action="Index">
+                                    <i class="bi bi-chevron-right"></i> Produits
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Category" asp-action="Index">
+                                    <i class="bi bi-chevron-right"></i> Catégories
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Home" asp-action="Contact">
+                                    <i class="bi bi-chevron-right"></i> Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Service Client -->
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h6 class="es-footer-title">Service Client</h6>
+                        <ul class="es-footer-links">
+                            <li>
+                                <a href="#">
+                                    <i class="bi bi-chevron-right"></i> Mon compte
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="bi bi-chevron-right"></i> Suivi commande
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="bi bi-chevron-right"></i> Retours
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="bi bi-chevron-right"></i> FAQ
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact & Newsletter -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <h6 class="es-footer-title">Contactez-nous</h6>
+
+                        <div class="es-footer-contact-item">
+                            <div class="es-footer-contact-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div class="es-footer-contact-text">
+                                <strong>Adresse</strong>
+                                Sfax – Route de Tunis KM 4
+                            </div>
+                        </div>
+
+                        <div class="es-footer-contact-item">
+                            <div class="es-footer-contact-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div class="es-footer-contact-text">
+                                <strong>Téléphone</strong>
+                                (+216) 21 491 299
+                            </div>
+                        </div>
+
+                        <div class="es-footer-contact-item">
+                            <div class="es-footer-contact-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div class="es-footer-contact-text">
+                                <strong>Email</strong>
+                                amal.benabdelghaffar@ipsas.tn
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Box -->
+                        <div class="es-newsletter-box mt-4">
+                            <h6 class="es-footer-title" style="padding-bottom: 0; margin-bottom: 8px;">Newsletter</h6>
+                            <p style="font-size: 0.875rem; color: var(--es-gray-500); margin-bottom: 0;">
+                                Recevez nos offres exclusives
+                            </p>
+                            <form class="es-newsletter-form">
+                                <input type="email" class="es-newsletter-input" placeholder="Votre email">
+                                <button type="submit" class="es-newsletter-btn">
+                                    <i class="bi bi-send-fill"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom - Barre Bleue -->
+        <div class="es-footer-bottom">
+            <div class="container">
+                <div class="es-footer-bottom-content">
+                    <p class="es-footer-copyright">
+                        © 2025 <strong>ElectroShop</strong>. Tous droits réservés. Développé par <strong>Amal Benabdelghaffar </strong>
+                    </p>
+                    <div class="es-footer-payments">
+                        <span>Paiement sécurisé :</span>
+                        <div class="es-payment-icon"><i class="bi bi-credit-card-fill"></i></div>
+                        <div class="es-payment-icon"><i class="bi bi-paypal"></i></div>
+                        <div class="es-payment-icon"><i class="bi bi-cash-stack"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- ✅ Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Script pour le menu mobile -->
+    <script>
+        document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
+            document.getElementById('mainNavList').classList.toggle('active');
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

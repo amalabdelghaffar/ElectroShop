@@ -1,0 +1,991 @@
+﻿@model IEnumerable<Atelier2.Models.Product>
+@using Atelier2.Models
+
+@{
+    ViewData["Title"] = "Accueil";
+    var categories = ViewData["Categories"] as IEnumerable<Category>;
+}
+
+<style>
+    /* ═══════════════════════════════════════════════════════════
+           HOME PAGE - Thème Blanc & Bleu Professionnel
+           ═══════════════════════════════════════════════════════════ */
+
+    /* Hero Section */
+    .es-hero {
+        background: linear-gradient(135deg, var(--es-primary, #1e40af) 0%, var(--es-primary-dark, #1e3a8a) 100%);
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .es-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .es-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: 20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+    .es-hero-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .es-hero-subtitle {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.05rem;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .es-hero-btn {
+        padding: 12px 28px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.938rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+    }
+
+    .es-hero-btn-primary {
+        background: #ffffff;
+        color: #1e40af;
+        border: 2px solid #ffffff;
+    }
+
+        .es-hero-btn-primary:hover {
+            background: transparent;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+    .es-hero-btn-outline {
+        background: transparent;
+        color: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+        .es-hero-btn-outline:hover {
+            background: #ffffff;
+            color: #1e40af;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+    /* Stats Card */
+    .es-stats-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        position: relative;
+        z-index: 1;
+    }
+
+    .es-stats-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .es-stats-title i {
+            color: #1e40af;
+            font-size: 1.2rem;
+        }
+
+    .es-stat-item {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .es-stat-value {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #1e40af;
+        line-height: 1.2;
+    }
+
+    .es-stat-label {
+        font-size: 0.813rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    /* Benefits Section */
+    .es-benefits {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0;
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+    .es-benefit-item {
+        padding: 24px 16px;
+        text-align: center;
+        border-right: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+    }
+
+        .es-benefit-item:last-child {
+            border-right: none;
+        }
+
+        .es-benefit-item:hover {
+            background: #f8fafc;
+        }
+
+    .es-benefit-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        color: #ffffff;
+        font-size: 1.3rem;
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+    }
+
+    .es-benefit-title {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 4px;
+    }
+
+    .es-benefit-text {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    /* Categories Section */
+    .es-section {
+        margin-bottom: 30px;
+    }
+
+    .es-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .es-section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .es-section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 4px;
+        }
+
+    .es-section-link {
+        font-size: 0.875rem;
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s ease;
+    }
+
+        .es-section-link:hover {
+            color: #1e3a8a;
+            gap: 8px;
+        }
+
+    /* Category Pills */
+    .es-category-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 50px;
+        color: #475569;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .es-category-pill:hover {
+            background: #1e40af;
+            border-color: #1e40af;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+        }
+
+        .es-category-pill i {
+            color: #1e40af;
+            font-size: 0.8rem;
+        }
+
+        .es-category-pill:hover i {
+            color: #ffffff;
+        }
+
+    /* Promo Cards */
+    .es-promo-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .es-promo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+    .es-promo-content {
+        padding: 30px;
+    }
+
+    .es-promo-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
+
+    .es-promo-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1e40af;
+        margin-bottom: 8px;
+    }
+
+    .es-promo-discount {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #10b981;
+        margin-bottom: 12px;
+    }
+
+    .es-promo-desc {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .es-promo-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: #1e40af;
+        color: #ffffff;
+        border: none;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .es-promo-btn:hover {
+            background: #1e3a8a;
+            color: #ffffff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+        }
+
+    .es-promo-image-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: #f8fafc;
+    }
+
+    .es-promo-image {
+        max-width: 100%;
+        max-height: 180px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+
+    .es-promo-card:hover .es-promo-image {
+        transform: scale(1.05);
+    }
+
+    /* Product Cards */
+    .es-product-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .es-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+    .es-product-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        background: #f8fafc;
+    }
+
+    .es-product-image {
+        width: 100%;
+        height: 140px;
+        object-fit: contain;
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .es-product-card:hover .es-product-image {
+        transform: scale(1.05);
+    }
+
+    .es-product-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .es-badge-danger {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+
+    .es-badge-warning {
+        background: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+    }
+
+    .es-product-actions {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        opacity: 0;
+        transform: translateX(10px);
+        transition: all 0.3s ease;
+    }
+
+    .es-product-card:hover .es-product-actions {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .es-product-action-btn {
+        width: 36px;
+        height: 36px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #475569;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+        .es-product-action-btn:hover {
+            background: #1e40af;
+            border-color: #1e40af;
+            color: #ffffff;
+        }
+
+    .es-product-body {
+        padding: 20px;
+    }
+
+    .es-product-category {
+        font-size: 0.75rem;
+        color: #1e40af;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .es-product-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .es-product-desc {
+        font-size: 0.813rem;
+        color: #64748b;
+        margin-bottom: 16px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .es-product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .es-product-price {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #1e40af;
+    }
+
+        .es-product-price small {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+    .es-product-stock {
+        font-size: 0.75rem;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 4px 10px;
+        border-radius: 50px;
+    }
+
+    .es-product-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .es-btn-details {
+        flex: 1;
+        padding: 10px 16px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        color: #475569;
+        font-size: 0.813rem;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+        .es-btn-details:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+    .es-btn-cart {
+        flex: 1;
+        padding: 10px 16px;
+        background: #1e40af;
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 0.813rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+        .es-btn-cart:hover {
+            background: #1e3a8a;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .es-btn-cart.added {
+            background: #10b981;
+        }
+
+    /* Empty State */
+    .es-empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+    }
+
+        .es-empty-state i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+    /* Responsive */
+    @@media (max-width: 991px) {
+        .es-hero {
+            padding: 30px;
+        }
+
+        .es-hero-title {
+            font-size: 1.5rem;
+        }
+
+        .es-benefit-item {
+            border-right: none;
+            border-bottom: 1px solid #e2e8f0;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .es-hero {
+            padding: 24px;
+        }
+
+        .es-stats-card {
+            margin-top: 24px;
+        }
+
+        .es-promo-image-wrapper {
+            padding: 16px;
+        }
+    }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="es-hero">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="es-hero-title">Bienvenue dans votre boutique en ligne</h1>
+            <p class="es-hero-subtitle">
+                Découvrez notre sélection de produits électroniques de qualité aux meilleurs prix.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+                <a asp-controller="Product" asp-action="Index" class="es-hero-btn es-hero-btn-primary">
+                    <i class="bi bi-bag-fill"></i> Voir tous les articles
+                </a>
+                <a asp-controller="Category" asp-action="Index" class="es-hero-btn es-hero-btn-outline">
+                    <i class="bi bi-tags"></i> Gérer les catégories
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="es-stats-card">
+                <h5 class="es-stats-title">
+                    <i class="bi bi-graph-up-arrow"></i> Statistiques rapides
+                </h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="es-stat-item">
+                            <div class="es-stat-value">@Model.Count()</div>
+                            <div class="es-stat-label">Articles</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="es-stat-item">
+                            <div class="es-stat-value">@((categories?.Count() ?? 0))</div>
+                            <div class="es-stat-label">Catégories</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="es-stat-item">
+                            <div class="es-stat-value">@Model.Sum(p => (int)p.QteStock)</div>
+                            <div class="es-stat-label">Stock total</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BENEFITS SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="es-benefits">
+    <div class="row g-0">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+                <div class="es-benefit-title">Retours Gratuits</div>
+                <p class="es-benefit-text">30 jours de garantie</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
+                <div class="es-benefit-title">Livraison Offerte</div>
+                <p class="es-benefit-text">Sur toutes vos commandes</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="es-benefit-title">Support 24/7</div>
+                <p class="es-benefit-text">Service client rapide</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-gift"></i>
+                </div>
+                <div class="es-benefit-title">Cartes Cadeaux</div>
+                <p class="es-benefit-text">Offrez le choix 🎁</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="es-benefit-title">Paiement Sécurisé</div>
+                <p class="es-benefit-text">Vos données protégées</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="es-benefit-item">
+                <div class="es-benefit-icon">
+                    <i class="bi bi-headset"></i>
+                </div>
+                <div class="es-benefit-title">Assistance Rapide</div>
+                <p class="es-benefit-text">Contactez-nous facilement</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CATEGORIES SECTION
+     ═══════════════════════════════════════════════════════════ -->
+@if (categories != null && categories.Any())
+{
+    <section class="es-section">
+        <div class="es-section-header">
+            <h2 class="es-section-title">Catégories</h2>
+            <a asp-controller="Category" asp-action="Index" class="es-section-link">
+                Voir tout <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (var cat in categories)
+            {
+                <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@cat.CategoryId"
+                   class="es-category-pill">
+                    <i class="bi bi-tag-fill"></i> @cat.CategoryName
+                </a>
+            }
+        </div>
+    </section>
+}
+
+<!-- ═══════════════════════════════════════════════════════════
+     PROMO SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="es-section">
+    <div class="es-section-header">
+        <h2 class="es-section-title">Offres Spéciales</h2>
+    </div>
+    <div class="row g-4">
+        <!-- Promo Card 1 -->
+        <div class="col-12 col-lg-6">
+            <div class="es-promo-card">
+                <div class="row g-0 h-100">
+                    <div class="col-7">
+                        <div class="es-promo-content">
+                            <span class="es-promo-badge">Offre Spéciale</span>
+                            <h3 class="es-promo-title">Smart Camera</h3>
+                            <div class="es-promo-discount">-40%</div>
+                            <p class="es-promo-desc">
+                                Surveillez votre maison en HD avec vision nocturne et alerte mobile.
+                            </p>
+                            <a href="#" class="es-promo-btn">
+                                <i class="bi bi-cart-plus"></i> Acheter Maintenant
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="es-promo-image-wrapper h-100">
+                            <img src="https://www.mytek.tn/media/catalog/product/c/a/camera-de-surveillance-interne-mipvision-d62pb-5mp.jpg"
+                                 alt="Smart Camera"
+                                 class="es-promo-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Promo Card 2 -->
+        <div class="col-12 col-lg-6">
+            <div class="es-promo-card">
+                <div class="row g-0 h-100">
+                    <div class="col-7">
+                        <div class="es-promo-content">
+                            <span class="es-promo-badge">En Promo</span>
+                            <h3 class="es-promo-title">Smart Watch</h3>
+                            <div class="es-promo-discount">-20%</div>
+                            <p class="es-promo-desc">
+                                Suivez votre activité, votre sommeil et vos notifications en temps réel.
+                            </p>
+                            <a href="#" class="es-promo-btn">
+                                <i class="bi bi-bag-heart"></i> Profiter de l'offre
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="es-promo-image-wrapper h-100">
+                            <img src="https://www.mytek.tn/media/catalog/product/m/o/montre-connectee-mibro-a3-mocha.jpg"
+                                 alt="Smart Watch"
+                                 class="es-promo-image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCTS SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="es-section">
+    <div class="es-section-header">
+        <h2 class="es-section-title">Nos Produits</h2>
+        <a asp-controller="Product" asp-action="Index" class="es-section-link">
+            Tout voir <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row g-4" id="featuredProducts">
+            @foreach (var item in Model)
+            {
+                string imagePath = string.IsNullOrEmpty(item.Image)
+                ? "https://via.placeholder.com/400x300?text=Image"
+                : Url.Content("~/images/" + item.Image);
+
+                string shortDescription = "Découvrez ce produit de qualité supérieure.";
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="es-product-card">
+                        <div class="es-product-image-wrapper">
+                            <img src="@imagePath"
+                                 class="es-product-image"
+                                 alt="@item.Name" />
+
+                            @if (item.QteStock <= 0)
+                            {
+                                <span class="es-product-badge es-badge-danger">
+                                    <i class="bi bi-x-circle me-1"></i> Rupture
+                                </span>
+                            }
+                            else if (item.QteStock < 5)
+                            {
+                                <span class="es-product-badge es-badge-warning">
+                                    <i class="bi bi-exclamation-circle me-1"></i> Stock limité
+                                </span>
+                            }
+
+                            <div class="es-product-actions">
+                                <button class="es-product-action-btn" title="Ajouter aux favoris">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
+                                   class="es-product-action-btn" title="Aperçu rapide">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="es-product-body">
+                            <div class="es-product-category">Électronique</div>
+                            <h5 class="es-product-name" title="@item.Name">@item.Name</h5>
+                            <p class="es-product-desc">@shortDescription</p>
+
+                            <div class="es-product-footer">
+                                <div class="es-product-price">
+                                    @item.Price.ToString("0.000") <small>TND</small>
+                                </div>
+                                <span class="es-product-stock">
+                                    <i class="bi bi-box-seam me-1"></i> @item.QteStock
+                                </span>
+                            </div>
+
+                            <div class="es-product-buttons">
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@item.ProductId"
+                                   class="es-btn-details">
+                                    <i class="bi bi-eye"></i> Détails
+                                </a>
+                                <button type="button"
+                                        class="es-btn-cart js-add-to-cart"
+                                        data-id="@item.ProductId">
+                                    <i class="bi bi-cart-plus"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="es-empty-state">
+            <i class="bi bi-inbox"></i>
+            <p>Aucun produit à afficher pour le moment.</p>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animation d'entrée des cartes
+            const cards = document.querySelectorAll('.es-product-card, .es-promo-card, .es-stats-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 80 * index);
+            });
+
+            // Animation des benefits
+            const benefits = document.querySelectorAll('.es-benefit-item');
+            benefits.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(15px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.3s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+
+            // Ajout au panier
+            const buttons = document.querySelectorAll('.js-add-to-cart');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const button = this;
+
+                    fetch('/Panier/PlusProduct/' + id, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        // Mise à jour du badge
+                        const badge = document.getElementById('cartCountBadge');
+                        if (badge) {
+                            const current = parseInt(badge.textContent || "0", 10);
+                            badge.textContent = current + 1;
+                        }
+
+                        // Feedback visuel
+                        button.classList.add('added');
+                        button.innerHTML = '<i class="bi bi-check-lg"></i> Ajouté';
+
+                        setTimeout(() => {
+                            button.classList.remove('added');
+                            button.innerHTML = '<i class="bi bi-cart-plus"></i> Ajouter';
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Une erreur est survenue lors de l'ajout au panier.");
+                    });
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿@model Atelier2.ViewModels.CreateRoleViewModel
+@{
+    ViewBag.Title = "Create New Role";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+    <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
+        <div class="text-center mb-3">
+            <i class="bi bi-person-gear text-primary" style="font-size: 3rem;"></i>
+            <h3 class="fw-bold mt-2">Créer un rôle</h3>
+            <p class="text-muted mb-0">Définissez un nouveau rôle utilisateur</p>
+        </div>
+
+        <form asp-action="CreateRole" method="post" class="mt-3">
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+            <div class="form-group mb-4">
+                <label asp-for="RoleName" class="form-label fw-semibold">Nom du rôle</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-shield-lock"></i></span>
+                    <input asp-for="RoleName" class="form-control" placeholder="Ex : Admin, Manager..." />
+                </div>
+                <span asp-validation-for="RoleName" class="text-danger small"></span>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                    <i class="bi bi-plus-circle me-1"></i> Créer le rôle
+                </button>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-controller="Admin" asp-action="ListRoles" class="text-decoration-none fw-semibold text-primary">
+                    <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

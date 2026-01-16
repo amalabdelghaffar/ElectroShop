@@ -1,0 +1,51 @@
+﻿@model Atelier2.Models.Category
+
+@{
+    ViewData["Title"] = "Supprimer une catégorie";
+}
+
+<!-- Bouton invisible pour activer la modale automatiquement -->
+<button type="button" id="openDeleteModal" class="d-none" data-bs-toggle="modal" data-bs-target="#deleteModal"></button>
+
+<!-- 🟢 MODALE DE CONFIRMATION -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-sm">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Supprimer la catégorie
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="fs-5 mb-3">
+                    Confirmer la suppression de la catégorie :
+                    <span class="fw-semibold text-dark">"@Model.CategoryName"</span> ?
+                </p>
+                <p class="text-muted small">Cette action est irréversible.</p>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="CategoryId" />
+                    <button type="button" class="btn btn-outline-primary px-3 me-2" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger px-3">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script pour ouvrir automatiquement la modale -->
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("openDeleteModal").click();
+        });
+    </script>
+}

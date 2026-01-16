@@ -1,0 +1,61 @@
+﻿@using Atelier2.ViewModels
+@model List<UserRoleViewModel>
+
+@{
+    ViewData["Title"] = "Gérer les utilisateurs du rôle";
+    var roleId = ViewBag.roleId;
+}
+
+<div class="container d-flex justify-content-center align-items-start py-4" style="min-height: 90vh;">
+    <div class="card shadow-lg p-4 w-100" style="max-width: 750px; border-radius: 15px;">
+        <div class="text-center mb-3">
+            <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+            <h3 class="fw-bold mt-2">Gérer les utilisateurs du rôle</h3>
+            <p class="text-muted mb-0">Ajouter ou retirer des utilisateurs de ce rôle</p>
+        </div>
+
+        <form method="post">
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-primary text-white fw-semibold rounded-top">
+                    <i class="bi bi-person-badge me-2"></i> Liste des utilisateurs
+                </div>
+
+                <div class="card-body">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div class="list-group">
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-circle text-success fs-5 me-2"></i>
+                                        <span class="fw-semibold">@Model[i].UserName</span>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input type="hidden" asp-for="@Model[i].UserId" />
+                                        <input type="hidden" asp-for="@Model[i].UserName" />
+                                        <input asp-for="@Model[i].IsSelected" class="form-check-input" role="switch" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Aucun utilisateur disponible pour ce rôle.</p>
+                    }
+                </div>
+
+                <div class="card-footer bg-light text-center">
+                    <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm me-2">
+                        <i class="bi bi-check-circle"></i> Mettre à jour
+                    </button>
+                    <a asp-action="EditRole" asp-route-id="@roleId"
+                       class="btn btn-outline-secondary rounded-pill px-4">
+                        <i class="bi bi-arrow-left-circle"></i> Annuler
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

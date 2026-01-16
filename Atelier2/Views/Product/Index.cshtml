@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Atelier2.Models.Product>
+
+@{
+    ViewData["Title"] = "Liste des produits";
+}
+
+<div class="container-xxl py-3">
+    <!-- Grille responsive + centrage horizontal -->
+    <div class="row g-3 justify-content-center">
+        @foreach (var product in Model)
+        {
+            var photoPath = Url.Content("~/images/" + (product.Image ?? "noimage.jpg"));
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 d-flex">
+                <div class="card product-card shadow-sm border-0 h-100 w-100 mx-auto">
+                    <!-- En-tête = titre + badges -->
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="product-title" title="@product.Name">@product.Name</h5>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-primary-subtle text-primary fw-semibold">
+                                Prix : @product.Price
+                            </span>
+
+                            <span class="badge @(product.QteStock > 0
+                                                                  ? "bg-success-subtle text-success fw-semibold"
+                                                                  : "bg-danger fw-semibold")">
+                            Qté : @product.QteStock
+                        </span>
+
+                            <span class="badge badge-category">
+                                @product.Category.CategoryName
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Image produit -->
+                    <div class="thumb">
+                        <img src="@photoPath" alt="@product.Name" class="img-fluid" loading="lazy" />
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="card-footer bg-transparent border-0 pt-2 pb-3">
+                        <div class="btn-group w-100" role="group" aria-label="Actions produit">
+                            <!-- Détails -->
+                            <a asp-controller="Product"
+                               asp-action="Details"
+                               asp-route-id="@product.ProductId"
+                               class="btn btn-ghost-view btn-sm">
+                                Détails
+                            </a>
+
+                            <!-- AJOUTER AU PANIER (remplace Edit / Delete) -->
+                            <a asp-controller="Panier"
+                               asp-action="AddProduct"
+                               asp-route-id="@product.ProductId"
+                               class="btn btn-ghost-primary btn-sm">
+                                Ajouter au panier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                }
+    </div>
+
+    <!-- Pagination centrée -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4" aria-label="Pagination des produits">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-categoryId="@ViewBag.CategoryId"
+                           asp-route-page="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

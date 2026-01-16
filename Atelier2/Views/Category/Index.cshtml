@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Atelier2.Models.Category>
+
+@{
+    ViewData["Title"] = "Liste des catégories";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-transparent border-0 text-center">
+            <h2 class="fw-bold text-primary mb-2">Liste des catégories</h2>
+            <p class="text-muted mb-0">Gérez vos catégories d’articles</p>
+        </div>
+
+        <div class="card-body px-4 py-3">
+            <div class="d-flex justify-content-end mb-3">
+                <a asp-action="Create" class="btn btn-outline-success btn-sm custom-btn">
+                    <i class="bi bi-plus-circle"></i> Ajouter une catégorie
+                </a>
+            </div>
+
+            <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-start ps-4">Nom</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="2" class="text-muted py-4">Aucune catégorie trouvée.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-start ps-4 fw-semibold category-name">
+                                    @item.CategoryName
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-outline-info btn-sm custom-btn">
+                                            <i class="bi bi-eye"></i> Détails
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-outline-primary btn-sm custom-btn">
+                                            <i class="bi bi-pencil"></i> Modifier
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-outline-danger btn-sm custom-btn">
+                                            <i class="bi bi-trash"></i> Supprimer
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
