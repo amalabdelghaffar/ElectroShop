@@ -44,7 +44,7 @@ Update-Database
 ##  Auteur
 
 **Amal Benabdelghaffar**
-- GitHub: [@Amalabedal22](https://github.com/amalabdelghaffar)
+- GitHub: [amalabdelghaffar](https://github.com/amalabdelghaffar)
 - LinkedIn: [Amal Benabdelghaffar](https://www.linkedin.com/in/amalbenabdelghaffar/)
 
 ##  License
